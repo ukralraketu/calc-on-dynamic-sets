@@ -3,6 +3,37 @@
 
 using namespace std;
 
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+// NOT CORRECT WORK
+
+int LEFT_BORDER_SET = 'A';
+int RIGHT_BORDER_SET = 'Z';
+
 class Elem {
 public:
     Elem* pointer = nullptr;
@@ -29,6 +60,7 @@ auto addElementInSet(Elem& _E, const char& _ch) {
 }
 
 auto showSet(Elem& _E) {
+    /**/ cout << "Хуй" << endl;
     Elem* _tracker = &_E;
     while (_tracker != nullptr) {
         cout << _tracker->value << endl;
@@ -46,43 +78,78 @@ auto cleanMemory(Elem& _E) {
     }
 }
 
+auto takeUserSet() {
+    cout << "Введите название множества (A-Z): ";
+    char userSet;
+    cin >> userSet;
+    if (int(userSet) < LEFT_BORDER_SET || int(userSet) > RIGHT_BORDER_SET) {
+        cout << "Недопустимое имя множества" << endl;
+        return char(0);
+    }
+    return userSet;
+}
 
 int main() {
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
 
-    Elem* A = new Elem();
-    Elem* tracker = A;
-
-    char s1 = 'A';
-    A->value = s1;
+    Elem* setList[26] = {nullptr};
 
     bool session_flag = true;
     while (session_flag) {
-        cout << "1. Добавить элемент в множество A" << "\n"
-             << "2. Показать множество A" << "\n"
-             << "3. Удалить множество A" << "\n"
+        cout << "1. Cоздать множество" << "\n"
+             << "2. Добавить элемент в множество A" << "\n"
+             << "3. Показать множество A" << "\n"
+             << "4. Удалить множество A" << "\n"
+             << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
         cin >> userCommand;
+        if (userCommand == 0) {
+            session_flag = false;
+            continue;
+        }
+        char userSet = takeUserSet();
+        if (userSet == char(0)) {
+                continue;;
+        }
         switch (userCommand) {
-            case 1:
+            case 1: {
+                if (setList[int(userSet) - LEFT_BORDER_SET] != nullptr) {
+                    cout << "Такое множество уже существует" << endl;
+                    break;
+                }
+                Elem* newSet = new Elem();
+                newSet->value = userSet;
+                setList[int(userSet) - LEFT_BORDER_SET] = newSet;
+                break;
+            }
+            case 2: {
                 cout << "Введите значение: ";
                 char userElement;
                 cin >> userElement;
-                addElementInSet(*A, userElement);
+                addElementInSet(*setList[int(userSet) - LEFT_BORDER_SET], userElement);
                 break;
-            case 2:
-                showSet(*A);
+            }
+            case 3: {
+                showSet(*setList[int(userSet) - LEFT_BORDER_SET]);
                 break;
-            case 3:
-                cleanMemory(*A);
-                session_flag = false;
+            }
+            case 4: {
+                cleanMemory(*setList[int(userSet) - LEFT_BORDER_SET]);
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
     }
 
+    for (size_t i = 0; i < 26; i++) {
+        if (setList[i] != nullptr) {
+            cleanMemory(*setList[i]);
+            cout << "Атоматическое освобождение памяти для множества: " << char(LEFT_BORDER_SET + i) << endl;
+        }
+    }
     return 0;
 }
