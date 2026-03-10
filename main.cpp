@@ -33,6 +33,27 @@ auto addElementInSet(Elem& _E, const char& _ch) {
     }
 }
 
+auto removeElementFromSet(Elem& _E, const char& _ch) {
+    Elem* _tracker = &_E;
+    Elem* next = _tracker->pointer;
+    while(next != nullptr) {
+        if (next->value > _ch) {
+            cout << "Символа \"" << _ch << "\" нет в массиве " << _E.value << endl;
+            break;
+        }
+        if (next->value == _ch) {
+            _tracker->pointer = next->pointer;
+            delete next;
+            break;
+        }
+        else if (next->pointer == nullptr) {
+            cout << "Символа \"" << _ch << "\" нет в массиве " << _E.value << endl;
+        }
+        _tracker = next;
+        next = _tracker->pointer;
+    }
+}
+
 auto showSet(Elem& _E) {
     /*DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE*/ cout << "Хуй" << endl;
     Elem* _tracker = &_E;
@@ -87,9 +108,10 @@ int main() {
     bool session_flag = true;
     while (session_flag) {
         cout << "1. Cоздать множество" << "\n"
-             << "2. Добавить элемент в множество" << "\n"
-             << "3. Показать множество" << "\n"
-             << "4. Удалить множество" << "\n"
+             << "2. Удалить множество" << "\n"
+             << "3. Добавить элемент в множество" << "\n"
+             << "4. Удалить элемент из множества" << "\n"
+             << "6. Показать множество" << "\n"
              << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
@@ -120,11 +142,8 @@ int main() {
                     cout << "Такого множества не существует" << endl;
                     break;
                 }
-                char userElement = takeUserChar();
-                if (userElement == ' ') {
-                    break;
-                }
-                addElementInSet(*setList[setpos], userElement);
+                cleanMemory(*setList[setpos]);
+                setList[setpos] = nullptr;
                 break;
             }
             case 3: {
@@ -132,7 +151,11 @@ int main() {
                     cout << "Такого множества не существует" << endl;
                     break;
                 }
-                showSet(*setList[setpos]);
+                char userElement = takeUserChar();
+                if (userElement == ' ') {
+                    break;
+                }
+                addElementInSet(*setList[setpos], userElement);
                 break;
             }
             case 4: {
@@ -140,8 +163,19 @@ int main() {
                     cout << "Такого множества не существует" << endl;
                     break;
                 }
-                cleanMemory(*setList[setpos]);
-                setList[setpos] = nullptr;
+                char userElement = takeUserChar();
+                if (userElement == ' ') {
+                    break;
+                }
+                removeElementFromSet(*setList[setpos], userElement);
+                break;
+            }
+            case 6: {
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                showSet(*setList[setpos]);
                 break;
             }
             default: {
