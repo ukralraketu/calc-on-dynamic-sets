@@ -3,8 +3,10 @@
 
 using namespace std;
 
-int LEFT_BORDER_SET = 'A';
-int RIGHT_BORDER_SET = 'Z';
+int LEFT_BORDER_CHAR = '!';   // 33
+int LEFT_BORDER_SET = 'A';    // 65
+int RIGHT_BORDER_SET = 'Z';   // 90
+int RIGHT_BORDER_CHAR = '~';  // 126
 
 class Elem {
 public:
@@ -32,7 +34,7 @@ auto addElementInSet(Elem& _E, const char& _ch) {
 }
 
 auto showSet(Elem& _E) {
-    /**/ cout << "Хуй" << endl;
+    /*DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE*/ cout << "Хуй" << endl;
     Elem* _tracker = &_E;
     while (_tracker != nullptr) {
         cout << _tracker->value << endl;
@@ -54,11 +56,26 @@ auto takeUserSet() {
     cout << "Введите название множества (A-Z): ";
     char userSet;
     cin >> userSet;
+    cin.clear();
     if (int(userSet) < LEFT_BORDER_SET || int(userSet) > RIGHT_BORDER_SET) {
         cout << "Недопустимое имя множества" << endl;
         return char(0);
     }
     return userSet;
+}
+
+auto takeUserChar() {
+    cout << "Введите значение: ";
+    char userChar;
+    cin >> userChar;
+    cin.clear();
+    if (LEFT_BORDER_CHAR <= (int)userChar && (int)userChar <= RIGHT_BORDER_CHAR) {
+        if (userChar < LEFT_BORDER_SET || RIGHT_BORDER_SET < userChar) {
+            return userChar;
+        }
+    }
+    cout << "Недопустимый символ" << endl;
+    return char(' ');
 }
 
 int main() {
@@ -70,13 +87,14 @@ int main() {
     bool session_flag = true;
     while (session_flag) {
         cout << "1. Cоздать множество" << "\n"
-             << "2. Добавить элемент в множество A" << "\n"
-             << "3. Показать множество A" << "\n"
-             << "4. Удалить множество A" << "\n"
+             << "2. Добавить элемент в множество" << "\n"
+             << "3. Показать множество" << "\n"
+             << "4. Удалить множество" << "\n"
              << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
         cin >> userCommand;
+        cin.clear();
         if (userCommand == 0) {
             session_flag = false;
             continue;
@@ -98,17 +116,30 @@ int main() {
                 break;
             }
             case 2: {
-                cout << "Введите значение: ";
-                char userElement;
-                cin >> userElement;
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                char userElement = takeUserChar();
+                if (userElement == ' ') {
+                    break;
+                }
                 addElementInSet(*setList[setpos], userElement);
                 break;
             }
             case 3: {
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
                 showSet(*setList[setpos]);
                 break;
             }
             case 4: {
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
                 cleanMemory(*setList[setpos]);
                 setList[setpos] = nullptr;
                 break;
@@ -118,7 +149,7 @@ int main() {
             }
         }
     }
-
+    
     for (size_t i = 0; i < 26; i++) {
         if (setList[i] != nullptr) {
             cleanMemory(*setList[i]);
