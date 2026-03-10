@@ -3,34 +3,6 @@
 
 using namespace std;
 
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-// NOT CORRECT WORK
-
 int LEFT_BORDER_SET = 'A';
 int RIGHT_BORDER_SET = 'Z';
 
@@ -113,30 +85,32 @@ int main() {
         if (userSet == char(0)) {
                 continue;;
         }
+        int setpos = int(userSet) - LEFT_BORDER_SET;
         switch (userCommand) {
             case 1: {
-                if (setList[int(userSet) - LEFT_BORDER_SET] != nullptr) {
+                if (setList[setpos] != nullptr) {
                     cout << "Такое множество уже существует" << endl;
                     break;
                 }
                 Elem* newSet = new Elem();
                 newSet->value = userSet;
-                setList[int(userSet) - LEFT_BORDER_SET] = newSet;
+                setList[setpos] = newSet;
                 break;
             }
             case 2: {
                 cout << "Введите значение: ";
                 char userElement;
                 cin >> userElement;
-                addElementInSet(*setList[int(userSet) - LEFT_BORDER_SET], userElement);
+                addElementInSet(*setList[setpos], userElement);
                 break;
             }
             case 3: {
-                showSet(*setList[int(userSet) - LEFT_BORDER_SET]);
+                showSet(*setList[setpos]);
                 break;
             }
             case 4: {
-                cleanMemory(*setList[int(userSet) - LEFT_BORDER_SET]);
+                cleanMemory(*setList[setpos]);
+                setList[setpos] = nullptr;
                 break;
             }
             default: {
