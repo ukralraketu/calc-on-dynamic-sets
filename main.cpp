@@ -97,6 +97,30 @@ auto checkEqual(Elem& _A, Elem& _B) {
     return false;
 }
 
+auto setSum(Elem& _A, Elem& _B) {
+    Elem* tracker_A = (&_A)->pointer;
+    Elem* tracker_B = (&_B)->pointer;
+    while(tracker_A != nullptr && tracker_B != nullptr) {
+        if (tracker_A->value < tracker_B->value) {
+            cout << tracker_A->value << " ";
+            tracker_A = tracker_A->pointer;
+        }
+        else {
+            cout << tracker_B->value << " ";
+            tracker_B = tracker_B->pointer;
+        }
+    }
+    while (tracker_A != nullptr) {
+        cout << tracker_A->value << " ";
+        tracker_A = tracker_A->pointer;
+    }
+    while (tracker_B != nullptr) {
+        cout << tracker_B->value << " ";
+        tracker_B = tracker_B->pointer;
+    }
+    cout << endl;
+}
+
 auto takeUserSet() {
     cout << "Введите название множества (A-Z): ";
     char userSet;
@@ -137,6 +161,8 @@ int main() {
              << "4. Удалить элемент из множества" << "\n"
              << "6. Показать множество" << "\n"
              << "67. Показать все множества" << "\n"
+             << "7. Сумма двух множеств" << "\n"
+             << "11. Проверить, равны ли множества"
              << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
@@ -225,6 +251,16 @@ int main() {
                 break;
             }
             case 7: {
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                if (setList[*setpos2] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                cout << userSet << " + " << *userSet2 << " = ";
+                setSum(*setList[setpos], *setList[*setpos2]);
                 delete userSet2;
                 delete setpos2;
                 break;
