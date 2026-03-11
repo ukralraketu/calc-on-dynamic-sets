@@ -55,12 +55,12 @@ auto removeElementFromSet(Elem& _E, const char& _ch) {
 }
 
 auto showSet(Elem& _E) {
-    /*DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE*/ cout << "Хуй" << endl;
     Elem* _tracker = &_E;
     while (_tracker != nullptr) {
-        cout << _tracker->value << endl;
+        cout << _tracker->value << " ";
         _tracker = _tracker->pointer;
     }
+    cout << endl;
 }
 
 auto cleanMemory(Elem& _E) {
@@ -71,6 +71,30 @@ auto cleanMemory(Elem& _E) {
         delete cleaner;
         cleaner = next;
     }
+}
+
+auto checkEqual(Elem& _A, Elem& _B) {
+    Elem* tracker_A = &_A;
+    Elem* tracker_B = &_B;
+    if (tracker_A->pointer == nullptr && tracker_B->pointer == nullptr) {
+        return true;
+    }
+    if (tracker_A->pointer == nullptr || tracker_B->pointer == nullptr) {
+        return false;
+    }
+    tracker_A = tracker_A->pointer;
+    tracker_B = tracker_B->pointer;
+    while (tracker_A->value == tracker_B->value) {
+        if (tracker_A->pointer == nullptr && tracker_B->pointer == nullptr) {
+            return true;
+        }
+        if (tracker_A->pointer == nullptr || tracker_B->pointer == nullptr) {
+            return false;
+        }
+        tracker_A = tracker_A->pointer;
+        tracker_B = tracker_B->pointer;
+    }
+    return false;
 }
 
 auto takeUserSet() {
@@ -112,6 +136,7 @@ int main() {
              << "3. Добавить элемент в множество" << "\n"
              << "4. Удалить элемент из множества" << "\n"
              << "6. Показать множество" << "\n"
+             << "67. Показать все множества" << "\n"
              << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
@@ -121,9 +146,22 @@ int main() {
             session_flag = false;
             continue;
         }
-        char userSet = takeUserSet();
-        if (userSet == char(0)) {
-                continue;;
+        char userSet;
+        if (userCommand != 67) {
+            userSet = takeUserSet();
+            if (userSet == char(0)) {
+                    continue;;
+            }
+        }
+        char* userSet2 = new char;
+        int* setpos2 = new int;
+        if (7 <= userCommand && userCommand <= 11) {
+            *userSet2 = takeUserSet();
+            *setpos2 = int(*userSet2) - LEFT_BORDER_SET;
+        }
+        else {
+            delete userSet2;
+            delete setpos2;
         }
         int setpos = int(userSet) - LEFT_BORDER_SET;
         switch (userCommand) {
@@ -176,6 +214,53 @@ int main() {
                     break;
                 }
                 showSet(*setList[setpos]);
+                break;
+            }
+            case 67: {
+                for (size_t i = 0; i < 26; i++) {
+                    if (setList[i] != nullptr) {
+                        showSet(*setList[i]);
+                    }
+                }
+                break;
+            }
+            case 7: {
+                delete userSet2;
+                delete setpos2;
+                break;
+            }
+            case 8: {
+                delete userSet2;
+                delete setpos2;
+                break;
+            }
+            case 9: {
+                delete userSet2;
+                delete setpos2;
+                break;
+            }
+            case 10: {
+                delete userSet2;
+                delete setpos2;
+                break;
+            }
+            case 11: {
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                if (setList[*setpos2] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    break;
+                }
+                if (checkEqual(*setList[setpos], *setList[*setpos2])) {
+                    cout << "Множества " << userSet << " и " << *userSet2 << " РАВНЫ" << endl;
+                }
+                else {
+                    cout << "Множества " << userSet << " и " << *userSet2 << " НЕ РАВНЫ" << endl;
+                }
+                delete userSet2;
+                delete setpos2;
                 break;
             }
             default: {
