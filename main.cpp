@@ -105,8 +105,13 @@ auto setSum(Elem& _A, Elem& _B) {
             cout << tracker_A->value << " ";
             tracker_A = tracker_A->pointer;
         }
-        else {
+        else if (tracker_A->value > tracker_B->value) {
             cout << tracker_B->value << " ";
+            tracker_B = tracker_B->pointer;
+        }
+        else {
+            cout << tracker_A->value << " ";
+            tracker_A = tracker_A->pointer;
             tracker_B = tracker_B->pointer;
         }
     }
@@ -119,6 +124,81 @@ auto setSum(Elem& _A, Elem& _B) {
         tracker_B = tracker_B->pointer;
     }
     cout << endl;
+}
+
+auto setMultiplication(Elem& _A, Elem& _B) {
+    Elem* tracker_A = (&_A)->pointer;
+    Elem* tracker_B = (&_B)->pointer;
+    while(tracker_A != nullptr && tracker_B != nullptr) {
+        if (tracker_A->value == tracker_B->value) {
+            cout << tracker_A->value << " ";
+            tracker_A = tracker_A->pointer;
+            tracker_B = tracker_B->pointer;
+        }
+        else if (tracker_A->value < tracker_B->value) {
+            tracker_A = tracker_A->pointer;
+        }
+        else {
+            tracker_B = tracker_B->pointer;
+        }
+    }
+    cout << endl;
+}
+
+auto potencial(Elem& _A, Elem& _B) {
+    Elem* tracker_A = (&_A)->pointer;
+    Elem* tracker_B = (&_B)->pointer;
+    while (tracker_A != nullptr) {
+        if (tracker_B != nullptr) {
+            if (tracker_A->value > tracker_B->value) {
+                tracker_B = tracker_B->pointer;
+                continue;
+            }
+            else if (tracker_A->value == tracker_B->value) {
+                tracker_A = tracker_A->pointer;
+                continue;
+            }
+            else if (tracker_A->value < tracker_B->value) {
+                cout << tracker_A->value << " ";
+                tracker_A = tracker_A->pointer;
+            }
+        }
+        else {
+            cout << tracker_A->value << " ";
+            tracker_A = tracker_A->pointer;
+        }
+    }
+    cout << endl;
+}
+
+auto checkSubset(Elem& _A, Elem& _B) {
+    Elem* tracker_A = (&_A)->pointer;
+    Elem* tracker_B = (&_B)->pointer;
+    if (tracker_B == nullptr) {
+        if (tracker_A == nullptr) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    while (tracker_A != nullptr) {
+        if (tracker_B == nullptr) {
+            return false;
+        }
+        if (tracker_A->value == tracker_B->value) {
+            tracker_A = tracker_A->pointer;
+            continue;
+        }
+        if (tracker_A->value > tracker_B->value) {
+            tracker_B = tracker_B->pointer;
+            continue;
+        }
+        if (tracker_A->value < tracker_B->value) {
+            return false;
+        }
+    }
+    return true;
 }
 
 auto takeUserSet() {
@@ -147,6 +227,11 @@ auto takeUserChar() {
     return char(' ');
 }
 
+auto cleans(char& _1, int& _2) {
+    delete &_1;
+    delete &_2;
+}
+
 int main() {
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
@@ -162,7 +247,10 @@ int main() {
              << "6. Показать множество" << "\n"
              << "67. Показать все множества" << "\n"
              << "7. Сумма двух множеств" << "\n"
-             << "11. Проверить, равны ли множества"
+             << "8. Пересечение двух множеств" << "\n"
+             << "9. Разность двух множеств" << "\n"
+             << "10. Проверить, является ли первое множество подмножеством второго" << "\n"
+             << "11. Проверить, равны ли множества" << "\n"
              << "0. Выход" << "\n"
              << "Ваш выбор: " << endl;
         int userCommand;
@@ -253,40 +341,80 @@ int main() {
             case 7: {
                 if (setList[setpos] == nullptr) {
                     cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
                     break;
                 }
                 if (setList[*setpos2] == nullptr) {
                     cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
                     break;
                 }
                 cout << userSet << " + " << *userSet2 << " = ";
                 setSum(*setList[setpos], *setList[*setpos2]);
-                delete userSet2;
-                delete setpos2;
+                cleans(*userSet2, *setpos2);
                 break;
             }
             case 8: {
-                delete userSet2;
-                delete setpos2;
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                if (setList[*setpos2] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                cout << userSet << " & " << *userSet2 << " = ";
+                setMultiplication(*setList[setpos], *setList[*setpos2]);
+                cleans(*userSet2, *setpos2);
                 break;
             }
             case 9: {
-                delete userSet2;
-                delete setpos2;
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                if (setList[*setpos2] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                cout << userSet << " - " << *userSet2 << " = ";
+                potencial(*setList[setpos], *setList[*setpos2]);
+                cleans(*userSet2, *setpos2);
                 break;
             }
             case 10: {
-                delete userSet2;
-                delete setpos2;
+                if (setList[setpos] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                if (setList[*setpos2] == nullptr) {
+                    cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
+                    break;
+                }
+                if (checkSubset(*setList[setpos], *setList[*setpos2])) {
+                    cout << "Множество " << userSet << " является подмножеством " << *userSet2 << endl;
+                }
+                else {
+                    cout << "Множество " << userSet << " НЕ является подмножеством " << *userSet2 << endl;
+                }
+                cleans(*userSet2, *setpos2);
                 break;
             }
             case 11: {
                 if (setList[setpos] == nullptr) {
                     cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
                     break;
                 }
                 if (setList[*setpos2] == nullptr) {
                     cout << "Такого множества не существует" << endl;
+                    cleans(*userSet2, *setpos2);
                     break;
                 }
                 if (checkEqual(*setList[setpos], *setList[*setpos2])) {
@@ -295,8 +423,7 @@ int main() {
                 else {
                     cout << "Множества " << userSet << " и " << *userSet2 << " НЕ РАВНЫ" << endl;
                 }
-                delete userSet2;
-                delete setpos2;
+                cleans(*userSet2, *setpos2);
                 break;
             }
             default: {
